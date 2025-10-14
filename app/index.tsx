@@ -1,143 +1,118 @@
-import { Background } from '@react-navigation/elements';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
 
-export default function HomeScreen() {
+export default function MainScreen() {
   return (
-    <Background>
-      <View style={styles.container}>
-        <View style={styles.topBar}>
-          <TouchableOpacity style={styles.topIconContainer}>
-            <Image style={styles.topIcon} source={require('../assets/images/menu.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.topIconContainer}>
-            <Image style={styles.topIcon} source={require('../assets/images/calculator.png')} />
-          </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={styles.topBar}>
+        <View style={styles.searchBox}>
+          <Image style={styles.icon} source={require('../assets/images/search.png')} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Що шукаєте?"
+            placeholderTextColor="#A0A0A0"
+          />
+        </View>
+        <Image style={styles.bellIcon} source={require('../assets/images/notification.png')} />
+      </View>
+
+      <View style={styles.content}></View>
+
+      <View style={styles.bottomBar}>
+        <View style={styles.navItem}>
+          <Image style={styles.icon} source={require('../assets/images/home.png')} />
+          <Text style={styles.navTextActive}>Головна</Text>
         </View>
 
-        <View style={styles.screen}>
-          <Text style={styles.bigText}>0</Text>
-        </View>
-        
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#5b5b5b'}]}><Text style={styles.text}>⌫</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#5b5b5b'}]}><Text style={styles.text}>AC</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#5b5b5b'}]}><Text style={styles.text}>%</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#ff9201'}]}><Text style={styles.opText}>÷</Text></TouchableOpacity>
+        <View style={styles.navItem}>
+          <Image style={styles.icon} source={require('../assets/images/heart.jpg')} />
+          <Text style={styles.navText}>Вибране</Text>
         </View>
 
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>7</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>8</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>9</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#ff9201'}]}><Text style={styles.opText}>×</Text></TouchableOpacity>
+        <View style={styles.navItem}>
+          <Image style={styles.icon} source={require('../assets/images/plus.png')} />
+          <Text style={styles.navText}>Створити</Text>
         </View>
 
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>4</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>5</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>6</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#ff9201'}]}><Text style={styles.opText}>−</Text></TouchableOpacity>
+        <View style={styles.navItem}>
+          <Image style={styles.icon} source={require('../assets/images/chat.png')} />
+          <Text style={styles.navText}>Чат</Text>
         </View>
 
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>1</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>2</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>3</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#ff9201'}]}><Text style={styles.opText}>+</Text></TouchableOpacity>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Image style={styles.topIcon} source={require('../assets/images/+-.png')} /></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>0</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>,</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#ff9201'}]}><Text style={styles.opText}>=</Text></TouchableOpacity>
+        <View style={styles.navItem}>
+          <Image style={styles.icon} source={require('../assets/images/profile.png')} />
+          <Text style={styles.navText}>Профіль</Text>
         </View>
       </View>
-    </Background>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
-    paddingHorizontal: 14,
-    justifyContent: 'flex-end',
-    paddingBottom: 28
+    backgroundColor: '#fff',
   },
   topBar: {
-    position: 'absolute',
-    top: 40,
-    left: 0,
-    right: 0,
-    paddingHorizontal: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  topIconContainer: {
-    backgroundColor: '#191919',
-    width: 45,
-    height: 45,
-    borderRadius: 30,
     alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#4c4c4c'
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingTop: 55,
+    paddingBottom: 10,
+    backgroundColor: '#f3f4f6',
   },
-  topIcon: {
-    width: 30, 
-    height: 30, 
-    tintColor: '#ffffff'
-  },
-  screen: {
-    marginBottom: 16,
-    paddingHorizontal: 8
-  },
-  smallText: {
-    color: '#9aa0a6',
-    fontSize: 18,
-    textAlign: 'right'
-  },
-  bigText: {
-    color: '#ffffff',
-    fontSize: 90,
-    textAlign: 'right',
-    fontWeight: '400',
-    lineHeight: 100
-  },
-
-  row: {
+  searchBox: {
     flexDirection: 'row',
-    marginBottom: 5,
-    alignItems: 'center'
-  },
-  button: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    paddingHorizontal: 10,
     flex: 1,
-    height: 90,
-    borderRadius: 100,
-    justifyContent: 'center',
+    marginRight: 12,
+    height: 36,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 15,
+    color: '#000',
+    marginLeft: 6,
+  },
+  icon: {
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
+  },
+  bellIcon: {
+    width: 22,
+    height: 22,
+    resizeMode: 'contain',
+  },
+  content: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  bottomBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    marginHorizontal: 5,
-    borderWidth: 1,
-    borderColor: '#4c4c4c'
+    borderTopWidth: 0.3,
+    borderColor: '#f3f4f6',
+    backgroundColor: '#fff',
+    height: 70,
   },
-
-  digitButton: {
-    backgroundColor: '#303030'
+  navItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  funcButton: {
-    backgroundColor: '#5b5b5b'
+  navText: {
+    fontSize: 12,
+    color: '#00424A',
+    marginTop: 4,
   },
-  opButton: {
-    backgroundColor: '#ff9201'
+  navTextActive: {
+    fontSize: 12,
+    color: '#00424A',
+    fontWeight: 'bold',
+    marginTop: 4,
   },
-
-  text: {
-    color: '#ffffff',
-    fontSize: 36
-  },
-  opText: {
-    color: '#ffffff',
-    fontSize: 56
-  }
 });
