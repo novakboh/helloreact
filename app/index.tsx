@@ -1,49 +1,127 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
 
-export default function MainScreen() {
+function TopBar() {
   return (
-    <View style={styles.container}>
-      <View style={styles.topBar}>
-        <View style={styles.searchBox}>
-          <Image style={styles.icon} source={require('../assets/images/search.png')} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Що шукаєте?"
-            placeholderTextColor="#A0A0A0"
-          />
-        </View>
-        <Image style={styles.bellIcon} source={require('../assets/images/notification.png')} />
+    <View style={styles.topBar}>
+      <View style={styles.searchBox}>
+        <Image style={styles.icon} source={require('../assets/images/search.png')} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Що шукаєте?"
+          placeholderTextColor="#A0A0A0"
+        />
       </View>
+      <Image style={styles.bellIcon} source={require('../assets/images/notification.png')} />
+    </View>
+  )
+}
 
-      <View style={styles.content}></View>
-
-      <View style={styles.bottomBar}>
-        <View style={styles.navItem}>
-          <Image style={styles.icon} source={require('../assets/images/home.png')} />
-          <Text style={styles.navTextActive}>Головна</Text>
-        </View>
-
-        <View style={styles.navItem}>
-          <Image style={styles.icon} source={require('../assets/images/heart.jpg')} />
-          <Text style={styles.navText}>Вибране</Text>
-        </View>
-
-        <View style={styles.navItem}>
-          <Image style={styles.icon} source={require('../assets/images/plus.png')} />
-          <Text style={styles.navText}>Створити</Text>
-        </View>
-
-        <View style={styles.navItem}>
-          <Image style={styles.icon} source={require('../assets/images/chat.png')} />
-          <Text style={styles.navText}>Чат</Text>
-        </View>
-
-        <View style={styles.navItem}>
-          <Image style={styles.icon} source={require('../assets/images/profile.png')} />
-          <Text style={styles.navText}>Профіль</Text>
-        </View>
+function MainScreen() {
+  return (
+    <View style={{ flex: 1 }}>
+      <TopBar/>
+      <View style={styles.screen}>
+        <Text>Home!</Text>
       </View>
     </View>
+  )
+}
+
+function FavouriteScreen() {
+  return (
+    <View style={{ flex: 1 }}>
+      <TopBar/>
+      <View style={styles.screen}>
+        <Text>Favourite!</Text>
+      </View>
+    </View>
+  )
+}
+
+function CreateScreen() {
+  return (
+    <View style={{ flex: 1 }}>
+      <TopBar/>
+      <View style={styles.screen}>
+        <Text>Create!</Text>
+      </View>
+    </View>
+  )
+}
+
+function ChatScreen() {
+  return (
+    <View style={{ flex: 1 }}>
+      <TopBar/>
+      <View style={styles.screen}>
+        <Text>Chat!</Text>
+      </View>
+    </View>
+  )
+}
+
+function ProfileScreen() {
+  return (
+    <View style={{ flex: 1 }}>
+      <TopBar/>
+      <View style={styles.screen}>
+        <Text>Profile!</Text>
+      </View>
+    </View>
+  )
+}
+
+const Tab = createBottomTabNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarShowLabel: true,
+          tabBarStyle: styles.bottomBar,
+          tabBarLabelStyle: { fontSize: 12, marginBottom: 5 },
+
+          tabBarIcon: ({ focused }) => {
+            let icon;
+
+            if (route.name === 'Home')
+              icon = require('../assets/images/home.png');
+            if (route.name === 'Favourite')
+              icon = require('../assets/images/heart.jpg');
+            if (route.name === 'Create')
+              icon = require('../assets/images/plus.png');
+            if (route.name === 'Chat')
+              icon = require('../assets/images/chat.png');
+            if (route.name === 'Profile')
+              icon = require('../assets/images/profile.png');
+
+            return (
+              <Image
+                source={icon}
+                style={{
+                  width: 22,
+                  height: 22,
+                  opacity: focused ? 1 : 0.4,
+                }}
+              />
+            );
+          },
+
+          tabBarActiveTintColor: '#00424A',
+          tabBarInactiveTintColor: '#A0A0A0',
+        })}
+      >
+        <Tab.Screen name="Home" component={MainScreen} options={{ title: 'Головна' }} />
+        <Tab.Screen name="Favourite" component={FavouriteScreen} options={{ title: 'Вибране' }} />
+        <Tab.Screen name="Create" component={CreateScreen} options={{ title: 'Створити' }} />
+        <Tab.Screen name="Chat" component={ChatScreen} options={{ title: 'Чат' }} />
+        <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Профіль' }} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -90,6 +168,11 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  screen: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   bottomBar: {
     flexDirection: 'row',
