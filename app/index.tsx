@@ -1,143 +1,89 @@
-import { Background } from '@react-navigation/elements';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { View, Text, FlatList, TextInput, TouchableOpacity, Image } from "react-native";
+import { useEffect, useState } from "react";
+import styles from "../ui/styles";
+import { fetchPlants, fetchFamilies } from "../services/trefle";
+import { useRouter } from "expo-router";
 
-export default function HomeScreen() {
+export default function Home() {
+  const [plants, setPlants] = useState([]);
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState("");
+  const [family, setFamily] = useState("");
+  const [edible, setEdible] = useState(false);
+  const [families, setFamilies] = useState([]);
+  const [showFamilies, setShowFamilies] = useState(false);
+  const router = useRouter();
+
+  async function load(reset = false) {
+    const data = await fetchPlants(query, page, family || undefined, edible);
+    setPlants(reset ? data : [...plants, ...data]);
+  }
+
+  useEffect(() => {
+    fetchFamilies().then(setFamilies);
+    load(true);
+  }, []);
+
   return (
-    <Background>
-      <View style={styles.container}>
-        <View style={styles.topBar}>
-          <TouchableOpacity style={styles.topIconContainer}>
-            <Image style={styles.topIcon} source={require('../assets/images/menu.png')} />
+    <View style={styles.screen}>
+      <Text style={styles.title}>Plant Catalog</Text>
+
+      <TextInput style={styles.input} placeholder="Search..." value={query} onChangeText={setQuery} />
+
+      <TouchableOpacity style={styles.button} onPress={() => { setPage(1); load(true); }}>
+        <Text style={{ color: "white" }}>Apply filters</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={[styles.input, { justifyContent: "center" }]} onPress={() => setShowFamilies(!showFamilies)}>
+        <Text>
+          {family ? family : "All families"}
+        </Text>
+      </TouchableOpacity>
+
+      {showFamilies && (
+        <View style={{ maxHeight: 200, backgroundColor: "white", borderRadius: 8 }}>
+          <FlatList
+            data={families}
+            keyExtractor={(i) => String(i.id)}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={{ padding: 10 }}
+                onPress={() => {
+                  setFamily(item.name);
+                  setShowFamilies(false);
+                  setPage(1);
+                  load(true);
+                }}
+              >
+                <Text>{item.name}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      )}
+
+      
+      <TouchableOpacity onPress={() => setEdible(!edible)}>
+        <Text>{edible ? "✓ Edible only" : "Show all"}</Text>
+      </TouchableOpacity>
+
+      <FlatList
+        data={plants}
+        keyExtractor={i => String(i.id)}
+        renderItem={({ item }) => (
+          <TouchableOpacity style={styles.card} onPress={() => router.push(`/plant/${item.id}`)}>
+            <Image source={{ uri: item.image_url }} style={styles.img} />
+            <View style={styles.cardText}>
+              <Text>{item.common_name}</Text>
+              <Text>{item.scientific_name}</Text>
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.topIconContainer}>
-            <Image style={styles.topIcon} source={require('../assets/images/calculator.png')} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.screen}>
-          <Text style={styles.bigText}>0</Text>
-        </View>
-        
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#5b5b5b'}]}><Text style={styles.text}>⌫</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#5b5b5b'}]}><Text style={styles.text}>AC</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#5b5b5b'}]}><Text style={styles.text}>%</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#ff9201'}]}><Text style={styles.opText}>÷</Text></TouchableOpacity>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>7</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>8</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>9</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#ff9201'}]}><Text style={styles.opText}>×</Text></TouchableOpacity>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>4</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>5</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>6</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#ff9201'}]}><Text style={styles.opText}>−</Text></TouchableOpacity>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>1</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>2</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>3</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#ff9201'}]}><Text style={styles.opText}>+</Text></TouchableOpacity>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Image style={styles.topIcon} source={require('../assets/images/+-.png')} /></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>0</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#303030'}]}><Text style={styles.text}>,</Text></TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#ff9201'}]}><Text style={styles.opText}>=</Text></TouchableOpacity>
-        </View>
-      </View>
-    </Background>
+        )}
+        onEndReached={() => {
+          setPage(page + 1);
+          load();
+        }}
+      />
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-    paddingHorizontal: 14,
-    justifyContent: 'flex-end',
-    paddingBottom: 28
-  },
-  topBar: {
-    position: 'absolute',
-    top: 40,
-    left: 0,
-    right: 0,
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  topIconContainer: {
-    backgroundColor: '#191919',
-    width: 45,
-    height: 45,
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#4c4c4c'
-  },
-  topIcon: {
-    width: 30, 
-    height: 30, 
-    tintColor: '#ffffff'
-  },
-  screen: {
-    marginBottom: 16,
-    paddingHorizontal: 8
-  },
-  smallText: {
-    color: '#9aa0a6',
-    fontSize: 18,
-    textAlign: 'right'
-  },
-  bigText: {
-    color: '#ffffff',
-    fontSize: 90,
-    textAlign: 'right',
-    fontWeight: '400',
-    lineHeight: 100
-  },
-
-  row: {
-    flexDirection: 'row',
-    marginBottom: 5,
-    alignItems: 'center'
-  },
-  button: {
-    flex: 1,
-    height: 90,
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 5,
-    borderWidth: 1,
-    borderColor: '#4c4c4c'
-  },
-
-  digitButton: {
-    backgroundColor: '#303030'
-  },
-  funcButton: {
-    backgroundColor: '#5b5b5b'
-  },
-  opButton: {
-    backgroundColor: '#ff9201'
-  },
-
-  text: {
-    color: '#ffffff',
-    fontSize: 36
-  },
-  opText: {
-    color: '#ffffff',
-    fontSize: 56
-  }
-});
